@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:bitcoin_ticker/coin_data.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -12,11 +13,12 @@ class _PriceScreenState extends State<PriceScreen> {
   //Todo 3-5, 3-5-2 <String> 주의
   List<DropdownMenuItem<String>> getDropdownItems() {
     List<DropdownMenuItem<String>> dropdownItems = [];
-    for (int i = 0; i < currenciesList.length; i++) {
+    // 1) for (int i = 0; i < currenciesList.length; i++) {
+    for (String currency in currenciesList) {
       // Todo 3-2
       // print(currenciesList);
       // Todo 3-3
-      String currency = currenciesList[i];
+      // String currency = currenciesList[i];
       // Todo 3-5
       var newItem = DropdownMenuItem(
         child: Text(currency),
@@ -25,6 +27,15 @@ class _PriceScreenState extends State<PriceScreen> {
       dropdownItems.add(newItem);
     }
     return dropdownItems;
+  }
+
+// Todo 4-2
+  List<Text> getPickerItems() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+    return pickerItems;
   }
 
   @override
@@ -64,19 +75,30 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-                value: selectedCurrency,
-                // Todo 3-6
-                items: getDropdownItems(),
-                onChanged: (value) {
-                  setState(() {
-                    String? selectedCurrency = value;
-                    // print(value);
-                  });
-                }),
+            // Todo 4-1 CupoertinoPicker
+            child: CupertinoPicker(
+              backgroundColor: Colors.lightBlue,
+              itemExtent: 32.0,
+              onSelectedItemChanged: (selectedIndex) {
+                print(selectedIndex);
+              }, // 'onSelectedItemChanged' requires callback
+              // Todo 4-End
+              children: getPickerItems(),
+            ),
           ),
         ],
       ),
     );
   }
 }
+// Save for later
+// DropdownButton<String>(
+// value: selectedCurrency,
+// // Todo 3-6
+// items: getDropdownItems(),
+// onChanged: (value) {
+// setState(() {
+// String? selectedCurrency = value;
+// // print(value);
+// });
+// }),
