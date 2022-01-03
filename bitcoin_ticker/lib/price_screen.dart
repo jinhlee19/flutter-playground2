@@ -29,6 +29,20 @@ class _PriceScreenState extends State<PriceScreen> {
     return dropdownItems;
   }
 
+// Todo 5-1
+  DropdownButton<String> getDropdownButtton() {
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      // Todo 3-6
+      items: getDropdownItems(),
+      onChanged: (value) {
+        setState(() {
+          String? selectedCurrency = value;
+        });
+      },
+    );
+  }
+
 // Todo 4-2
   List<Text> getPickerItems() {
     List<Text> pickerItems = [];
@@ -91,14 +105,3 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 }
-// Save for later
-// DropdownButton<String>(
-// value: selectedCurrency,
-// // Todo 3-6
-// items: getDropdownItems(),
-// onChanged: (value) {
-// setState(() {
-// String? selectedCurrency = value;
-// // print(value);
-// });
-// }),
