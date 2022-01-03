@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bitcoin_ticker/coin_data.dart';
+import 'dart:io' show Platform;
+// import 'dart:io' hide Platform;
+// import 'dart:io' as Platform; rename package name.
 
 class PriceScreen extends StatefulWidget {
+  const PriceScreen({Key? key}) : super(key: key);
+
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  // Todo 3-1
   String selectedCurrency = 'USD';
-  //Todo 3-5, 3-5-2 <String> 주의
-  List<DropdownMenuItem<String>> getDropdownItems() {
+  // <String> 주의
+  DropdownButton<String> androidDropDown() {
     List<DropdownMenuItem<String>> dropdownItems = [];
-    // 1) for (int i = 0; i < currenciesList.length; i++) {
     for (String currency in currenciesList) {
-      // Todo 3-2
-      // print(currenciesList);
-      // Todo 3-3
-      // String currency = currenciesList[i];
-      // Todo 3-5
       var newItem = DropdownMenuItem(
         child: Text(currency),
         value: currency,
       );
       dropdownItems.add(newItem);
     }
-    return dropdownItems;
-  }
-
-// Todo 5-1
-  DropdownButton<String> getDropdownButtton() {
     return DropdownButton<String>(
       value: selectedCurrency,
-      // Todo 3-6
-      items: getDropdownItems(),
+      items: dropdownItems,
       onChanged: (value) {
         setState(() {
           String? selectedCurrency = value;
@@ -43,18 +35,31 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-// Todo 4-2
-  List<Text> getPickerItems() {
+  Widget? getPicker() {
+    if (Platform.isIOS) {
+      return iOSPicker();
+    } else if (Platform.isAndroid) {
+      return androidDropDown();
+    }
+  }
+
+  CupertinoPicker iOSPicker() {
     List<Text> pickerItems = [];
     for (String currency in currenciesList) {
       pickerItems.add(Text(currency));
     }
-    return pickerItems;
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(selectedIndex);
+      },
+      children: pickerItems,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    getDropdownItems();
     return Scaffold(
       appBar: AppBar(
         title: const Text('🤑 Coin Ticker'),
@@ -89,16 +94,9 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            // Todo 4-1 CupoertinoPicker
-            child: CupertinoPicker(
-              backgroundColor: Colors.lightBlue,
-              itemExtent: 32.0,
-              onSelectedItemChanged: (selectedIndex) {
-                print(selectedIndex);
-              }, // 'onSelectedItemChanged' requires callback
-              // Todo 4-End
-              children: getPickerItems(),
-            ),
+            child: iOSPicker(),
+            // child: getPicker(),
+            // child: Platform.isIOS ? iOSPicker() : androidDropDown(),
           ),
         ],
       ),
