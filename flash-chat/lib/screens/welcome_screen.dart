@@ -22,7 +22,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: const Duration(seconds: 3), vsync: this
+        AnimationController(duration: const Duration(seconds: 2), vsync: this
             // customizing animation
             // upperBound: 100.0
             ); //ticker provider
