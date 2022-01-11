@@ -15,22 +15,43 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   // todo 5-1 animation initiator
   late AnimationController controller;
   // todo 5-2 init state override
+  // todo 5-4
+  late Animation animation;
   @override
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       vsync: this,
       //customizing animation
       // upperBound: 100.0,
       // 안먹힘
     ); //ticker provider
+    // todo 5-4 parent는 animation controll로 잡아주고,
+    animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
     // todo 5-3
     controller.forward();
+    // controller.reverse(from: 1);//todo 5-7-1 testing
+    // todo 5-7-2 addStatusListener Method
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
     controller.addListener(() {
       setState(() {});
-      print(controller.value);
+      // print(controller.value);
+      print(animation.value);
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -38,7 +59,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       // todo opacity
       // backgroundColor: Colors.red.withOpacity(.8),
-      backgroundColor: Colors.red.withOpacity(controller.value),
+      // backgroundColor: Colors.red.withOpacity(controller.value),
+      backgroundColor: Colors.white,
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -53,16 +75,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: 60.0,
+                    // height: controller.value,
+                    // todo 5-6  ->
+                    height: animation.value * 100,
                   ),
                 ),
                 const Text(
                   'Flash Chat',
-                  // '${controller.value.toInt()}%',
+                  // '${controller.value.toInt()}%', // 오류
                   style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.w900,
-                  ),
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black87),
                 ),
               ],
             ),
