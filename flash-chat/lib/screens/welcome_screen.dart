@@ -9,11 +9,37 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+// todo 5-2-1 with SingleTicker...
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  // todo 5-1 animation initiator
+  late AnimationController controller;
+  // todo 5-2 init state override
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+      //customizing animation
+      // upperBound: 100.0,
+      // 안먹힘
+    ); //ticker provider
+    // todo 5-3
+    controller.forward();
+    controller.addListener(() {
+      setState(() {});
+      print(controller.value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // todo opacity
+      // backgroundColor: Colors.red.withOpacity(.8),
+      backgroundColor: Colors.red.withOpacity(controller.value),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -32,6 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 const Text(
                   'Flash Chat',
+                  // '${controller.value.toInt()}%',
                   style: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
