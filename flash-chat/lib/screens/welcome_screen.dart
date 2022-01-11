@@ -13,33 +13,36 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   // todo 5-1 animation initiator
-  late AnimationController controller;
   // todo 5-2 init state override
   // todo 5-4
+  late AnimationController controller;
   late Animation animation;
+
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-      duration: Duration(seconds: 2),
-      vsync: this,
-      //customizing animation
-      // upperBound: 100.0,
-      // 안먹힘
-    ); //ticker provider
-    // todo 5-4 parent는 animation controll로 잡아주고,
-    animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
+    controller =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this
+            // customizing animation
+            // upperBound: 100.0
+            ); //ticker provider
+    // // todo 5-4 parent는 animation controller로 잡아주기
+    // animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
+// todo 5-7-2 addStatusListener Method
+    // animation.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     controller.reverse(from: 1.0);
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     controller.forward();
+    //   }
+    // });
     // todo 5-3
     controller.forward();
     // controller.reverse(from: 1);//todo 5-7-1 testing
-    // todo 5-7-2 addStatusListener Method
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.reverse(from: 1.0);
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
+    // todo 5-8
+    animation = ColorTween(begin: Colors.redAccent, end: Colors.blueAccent)
+        .animate(controller);
+    // todo 5-5?
     controller.addListener(() {
       setState(() {});
       // print(controller.value);
@@ -60,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       // todo opacity
       // backgroundColor: Colors.red.withOpacity(.8),
       // backgroundColor: Colors.red.withOpacity(controller.value),
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value,
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -77,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     child: Image.asset('images/logo.png'),
                     // height: controller.value,
                     // todo 5-6  ->
-                    height: animation.value * 100,
+                    height: 60,
                   ),
                 ),
                 const Text(
