@@ -1,4 +1,4 @@
-// [Dart] Mixins
+// [Dart] Mixins - 여러 클래스 상속받기
 
 void main() {
 //   Animal().move();
