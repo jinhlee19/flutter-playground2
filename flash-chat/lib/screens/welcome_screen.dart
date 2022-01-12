@@ -8,6 +8,8 @@ import 'package:flash_chat/components/rounded_button.dart';
 class WelcomeScreen extends StatefulWidget {
   // String id = 'welcome_screen';
   static const String id = 'welcome_screen';
+
+  const WelcomeScreen({Key? key}) : super(key: key);
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
