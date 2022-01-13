@@ -14,6 +14,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
   late String messageText;
@@ -122,35 +123,8 @@ class _ChatScreenState extends State<ChatScreen> {
             //     );
             //   },
             // ),
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
-              builder: (context, snapshot) {
-                List<MessageBubble> messageBubbles = [];
-                if (snapshot.hasData) {
-                  // data!.docs **
-                  final messages = snapshot.data!.docs;
-
-                  for (var message in messages) {
-                    final messageText = message.get('text');
-                    final messageSender = message.get('sender');
-                    final messageBubble =
-                        MessageBubble(sender: messageSender, text: messageText);
-                    // Text(
-                    //   '$messageSender said $messageText',
-                    //   style: TextStyle(fontSize: 60.0),
-                    // );
-                    messageBubbles.add(messageBubble);
-                  }
-                }
-                return Expanded(
-                  child: ListView(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                    children: messageBubbles,
-                  ),
-                );
-              },
-            ),
+            // StreamBuilder - Todo Moved to stateless Widget
+            MessagesStream(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -158,6 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: messageTextController,
                       onChanged: (value) {
                         messageText = value;
                         //Do something with the user input.
@@ -167,6 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
+                      messageTextController.clear();
                       // Implement send functionality.
                       // todo 14-3 messageText + loggedInUser.email
                       _firestore.collection('messages').add(
@@ -187,10 +163,37 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MessageStream extends StatelessWidget {
+class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('messages').snapshots(),
+      builder: (context, snapshot) {
+        List<MessageBubble> messageBubbles = [];
+        if (snapshot.hasData) {
+          // data!.docs **
+          final messages = snapshot.data!.docs;
+
+          for (var message in messages) {
+            final messageText = message.get('text');
+            final messageSender = message.get('sender');
+            final messageBubble =
+                MessageBubble(sender: messageSender, text: messageText);
+            // Text(
+            //   '$messageSender said $messageText',
+            //   style: TextStyle(fontSize: 60.0),
+            // );
+            messageBubbles.add(messageBubble);
+          }
+        }
+        return Expanded(
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            children: messageBubbles,
+          ),
+        );
+      },
+    );
   }
 }
 
