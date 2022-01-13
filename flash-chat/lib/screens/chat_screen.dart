@@ -125,21 +125,29 @@ class _ChatScreenState extends State<ChatScreen> {
             StreamBuilder<QuerySnapshot>(
               stream: _firestore.collection('messages').snapshots(),
               builder: (context, snapshot) {
-                List<Text> messageWidgets = [];
+                List<MessageBubble> messageBubbles = [];
                 if (snapshot.hasData) {
-                  // ㅠㅠ
+                  // data!.docs **
                   final messages = snapshot.data!.docs;
 
                   for (var message in messages) {
                     final messageText = message.get('text');
                     final messageSender = message.get('sender');
-                    final messageWidget =
-                        Text('$messageSender said $messageText');
-                    messageWidgets.add(messageWidget);
+                    final messageBubble =
+                        MessageBubble(sender: messageSender, text: messageText);
+                    // Text(
+                    //   '$messageSender said $messageText',
+                    //   style: TextStyle(fontSize: 60.0),
+                    // );
+                    messageBubbles.add(messageBubble);
                   }
                 }
-                return Column(
-                  children: messageWidgets,
+                return Expanded(
+                  child: ListView(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                    children: messageBubbles,
+                  ),
                 );
               },
             ),
@@ -174,6 +182,50 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MessageStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  MessageBubble({required this.sender, required this.text});
+  final String sender;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            sender,
+            style: TextStyle(fontSize: 12.0, color: Colors.black54),
+          ),
+          Material(
+            color: Colors.lightBlueAccent,
+            borderRadius: BorderRadius.circular(30),
+            elevation: 5.0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
