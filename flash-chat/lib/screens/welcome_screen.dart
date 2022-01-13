@@ -14,12 +14,8 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-// todo 5-2-1 with SingleTicker...
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  // todo 5-1 animation initiator
-  // todo 5-2 init state override
-  // todo 5-4
   late AnimationController controller;
   late Animation animation;
 
@@ -27,45 +23,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this
-            // customizing animation
-            // upperBound: 100.0
-            ); //ticker provider
-    // // todo 5-4 parent는 animation controller로 잡아주기
-    // animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
-// todo 5-7-2 addStatusListener Method
-    // animation.addStatusListener((status) {
-    //   if (status == AnimationStatus.completed) {
-    //     controller.reverse(from: 1.0);
-    //   } else if (status == AnimationStatus.dismissed) {
-    //     controller.forward();
-    //   }
-    // });
-    // todo 5-3
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
     controller.forward();
-    // controller.reverse(from: 1);//todo 5-7-1 testing
-    // todo 5-8
     animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
         .animate(controller);
-    // todo 5-5?
     controller.addListener(() {
       setState(() {});
-      // print(controller.value);
-      // print(animation.value);
     });
   }
 
   @override
   void dispose() {
     controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // todo opacity
       // backgroundColor: Colors.red.withOpacity(.8),
       // backgroundColor: Colors.red.withOpacity(controller.value),
       backgroundColor: animation.value,
@@ -79,16 +54,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             Row(
               children: <Widget>[
                 Hero(
-                  //todo 4-1 hero widget start
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
                     // height: controller.value,
-                    // todo 5-6  ->
                     height: 60,
                   ),
                 ),
-                //todo 7-3
                 AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText('Flash Chat',
@@ -96,14 +68,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         speed: Duration(milliseconds: 300))
                   ],
                   totalRepeatCount: 1,
-                  // TypewriterAnimatedTextKit(
-                  //   text: ['Flash Chat'],
-                  //   // '${controller.value.toInt()}%', // 오류
-                  //   textStyle: TextStyle(
-                  //       fontSize: 35.0,
-                  //       fontWeight: FontWeight.w900,
-                  //       color: Colors.black87),
-                  // ),
                 ),
               ],
             ),
