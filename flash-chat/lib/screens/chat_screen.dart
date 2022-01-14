@@ -172,8 +172,8 @@ class MessagesStream extends StatelessWidget {
         List<MessageBubble> messageBubbles = [];
         if (snapshot.hasData) {
           // data!.docs **
-          final messages = snapshot.data!.docs;
-
+          // todo
+          final messages = snapshot.data!.docs.reversed;
           for (var message in messages) {
             final messageText = message.get('text');
             //who did send?
@@ -198,6 +198,7 @@ class MessagesStream extends StatelessWidget {
         }
         return Expanded(
           child: ListView(
+            reverse: true, // 최근의 텍스트가 위로 올라옴.
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
             children: messageBubbles,
           ),
