@@ -8,15 +8,6 @@ class TaskTile extends StatefulWidget {
 class _TaskTileState extends State<TaskTile> {
   // 변수 - 변경될수 있음.
   bool isChecked = false;
-  void checkboxCallback(bool? checkboxState) {
-    setState(() {
-      if (checkboxState != null) {
-        isChecked = checkboxState;
-      } else {
-        isChecked = true;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +18,27 @@ class _TaskTileState extends State<TaskTile> {
             decoration: isChecked ? TextDecoration.lineThrough : null),
       ),
       trailing: TaskCheckbox(
-          checkboxState: isChecked, toggleCheckboxState: checkboxCallback),
+          checkboxState: isChecked,
+          toggleCheckboxState: (bool? checkboxState) {
+            setState(() {
+              if (checkboxState != null) {
+                isChecked = checkboxState;
+              } else {
+                isChecked = true;
+              }
+            });
+          }),
     );
   }
 }
 
 class TaskCheckbox extends StatelessWidget {
-  //stateless widget에서는 final -> (1) 빌드 후 값을 변경하지 않음. 변경될시엔 다시시작시켜서 (2) 지우고 리빌드
+  //stateless widget 에서는 final -> (1) 빌드 후 값을 변경하지 않음. 변경될시엔 다시시작시켜서 (2) 지우고 리빌드
   final bool checkboxState;
   // final Function toggleCheckboxState;
   final void Function(bool?) toggleCheckboxState;
-  // (2) TaskCheckbox가 실행되면 bool값을 받아서 widget이 rebuild 된다.
-  TaskCheckbox(
+  // (2) TaskCheckbox 가 실행되면 bool 값을 받아서 widget 이 rebuild 된다.
+  const TaskCheckbox(
       {required this.checkboxState, required this.toggleCheckboxState});
 
   @override
