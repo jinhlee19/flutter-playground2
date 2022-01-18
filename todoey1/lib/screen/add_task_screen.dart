@@ -8,6 +8,8 @@ class AddTaskScreen extends StatelessWidget {
     return Container(
       color: Color(0xFF757575),
       child: Container(
+        // todo 2 키보드 높이 위로 끌어올림
+        // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.top),
         padding: EdgeInsets.all(40.0),
         decoration: BoxDecoration(
           color: Colors.white,

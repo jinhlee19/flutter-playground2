@@ -13,7 +13,11 @@ class TasksScreen extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet(
-              context: context, builder: (context) => AddTaskScreen());
+              // Todo 1 Modal의 풀스크린화. 키보드에 의해서 add버튼 가려지는걸 방지
+              // isScrollControlled: true,
+              context: context,
+              builder: (context) =>
+                  SingleChildScrollView(child: AddTaskScreen()));
         },
       ),
       body: Column(
