@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todoey1/models/task.dart';
+import 'package:todoey1/screen/add_task_screen.dart';
 import 'package:todoey1/widgets/tasks_list.dart';
-import 'add_task_screen.dart';
 
 class TasksScreen extends StatefulWidget {
+  late final Function addTaskCallback;
+  AddTaskScreen(this.addTaskCallback);
   @override
   State<TasksScreen> createState() => _TasksScreenState();
 }
@@ -27,7 +29,9 @@ class _TasksScreenState extends State<TasksScreen> {
               // isScrollControlled: true,
               context: context,
               builder: (context) =>
-                  SingleChildScrollView(child: AddTaskScreen()));
+                  SingleChildScrollView(child: AddTaskScreen(newTaskTitle){
+                    print(newTaskTitle);
+                  }));
         },
       ),
       body: Column(
