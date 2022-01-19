@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey1/models/task.dart';
+import 'package:todoey1/models/task_data.dart';
 import 'package:todoey1/screen/add_task_screen.dart';
 import 'package:todoey1/widgets/tasks_list.dart';
 
@@ -9,12 +11,6 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'buy milk'),
-    Task(name: 'buy eggs'),
-    Task(name: 'buy bread'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +59,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  '${tasks.length}',
+                  '${Provider.of<TaskData>(context)} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                   ),
