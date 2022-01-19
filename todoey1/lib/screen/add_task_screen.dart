@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoey1/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey1/models/task_data.dart';
 
 class AddTaskScreen extends StatelessWidget {
   late String newTaskTitle;
@@ -43,7 +46,9 @@ class AddTaskScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                addTaskCallback(newTaskTitle);
+                final task = Task(name: newTaskTitle);
+                Provider.of<TaskData>(context).tasks.add(task);
+                Navigator.pop(context);
               },
               child: Text(
                 'Add',
